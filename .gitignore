@@ -1,0 +1,41 @@
+# Ape artifacts
+.build/
+.cache/
+.deployments/
+artifacts/
+reports/
+
+# Python environments & caches
+.env
+.env.*
+.venv/
+.python-version
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+
+# Coverage & logs
+.coverage
+coverage.xml
+htmlcov/
+*.log
+
+# Databases & local state
+*.db
+*.sqlite
+*.sqlite3
+state/
+
+# Secrets & keys (never commit actual files)
+secrets/
+*.key
+*.pem
+*.p12
+*.keystore
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
