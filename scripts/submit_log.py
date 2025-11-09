@@ -12,27 +12,24 @@ import typer
 
 from service import client
 
-app = typer.Typer(help="Submit an audit log entry to the Moonbase Alpha contract.")
 
-
-@app.command()
-def log(
+def main(
     verb: str = typer.Argument(..., help="Action verb describing the event (e.g., CREATE)."),
     payload_hash: str = typer.Argument(..., help="0x-prefixed keccak or content hash."),
     ref_id: str = typer.Argument(..., help="External reference ID correlating to off-chain data."),
-    account_alias: str = typer.Option(
+    account_alias: str | None = typer.Option(
         None,
         "--account-alias",
         "-a",
         help="Ape account alias used to sign the transaction. Defaults to $APE_ACCOUNT_ALIAS.",
     ),
-    contract_address: str = typer.Option(
+    contract_address: str | None = typer.Option(
         None,
         "--contract-address",
         "-c",
         help="AuditLog contract address. Defaults to $AUDIT_LOG_ADDRESS.",
     ),
-):
+) -> None:
     payload = client.LogPayload(verb=verb, payload_hash=payload_hash, ref_id=ref_id)
     tx_hash = client.submit_log(
         payload,
@@ -43,4 +40,4 @@ def log(
 
 
 if __name__ == "__main__":
-    app()
+    typer.run(main)

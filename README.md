@@ -53,9 +53,21 @@ SRD.md            # System requirements & architecture plan
 ## Useful Commands
 - `ape compile` – compile contracts in `contracts/`.
 - `ape test --network moonbeam:moonbase` – run Pytest suites against Moonbase Alpha (or omit `--network` for local testing).
+- `ape run scripts/deploy_audit_log.py --network moonbeam:moonbase -- --account-alias ledger --save-env .env.local` – deploy `AuditLog` and persist its address.
 - `ape run scripts/submit_log.py --network moonbeam:moonbase -- verb 0xHASH ref-123` – broadcast a log entry (reads env vars for account/contract unless overridden with flags).
 - `ape run scripts/fetch_logs.py --network moonbeam:moonbase -- --limit 50` – export recent entries to `artifacts/audit_snapshot.json`.
 - `uvicorn service.api:app --reload` – start the REST API locally (POST `/logs`, GET `/logs?limit=10`).
+
+## Deploying to Moonbase Alpha
+1. Fund your deployment account via the [Moonbase Alpha faucet](https://apps.moonbeam.network/moonbase-alpha/faucet/).
+2. Ensure the account is imported into Ape (`ape accounts import <alias>`).
+3. Deploy the contract:
+   ```bash
+   ape run scripts/deploy_audit_log.py --network moonbeam:moonbase -- --account-alias <alias> --save-env .env.local
+   ```
+4. Source the updated env file so `AUDIT_LOG_ADDRESS` is available to the client/API.
+
+Each deployment also writes a JSON record under `artifacts/deployments/` for auditability.
 
 ## Security & Public Repo Hygiene
 - Secrets (RPC URLs with credentials, private keys) must stay in environment variables or encrypted keyfiles ignored by Git.
