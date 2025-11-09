@@ -6,7 +6,7 @@ Source follows the Ape layout: `contracts/` for Solidity/Vyper, `scripts/` for a
 ## Build, Test, and Development Commands
 - `ape compile` – rebuilds every contract; run after edits.
 - `ape test` – runs the Pytest suite in `tests/`; add `-k <pattern>` to focus.
-- `ape run scripts/<name>.py --network <alias>` – executes deployment or maintenance scripts against a target network.
+- `ape run scripts/<name>.py --network <alias>` – executes deployment or maintenance scripts against a target network (e.g., `deploy_audit_log.py` to roll out contracts, `submit_log.py`/`fetch_logs.py` for operational flows).
 - `ape console --network <alias>` – opens an interactive shell with project accounts.
 Activate via `source .venv/bin/activate` before running Ape.
 

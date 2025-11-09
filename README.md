@@ -49,6 +49,7 @@ SRD.md            # System requirements & architecture plan
 - `APE_ACCOUNT_ALIAS` – Ape keystore alias used for signing transactions.
 - `MOONBASE_RPC_URL` – RPC endpoint consumed by Ape (already referenced in `ape-config.yaml`).
 - `PRIVATE_KEY` (optional) – only if injecting a raw key via Ape; never commit this value.
+- `AUDIT_LOG_ENV_PATH` (optional) – when set, the deploy script writes the latest contract address to this `.env` file.
 
 ## Useful Commands
 - `ape compile` – compile contracts in `contracts/`.
@@ -60,12 +61,16 @@ SRD.md            # System requirements & architecture plan
 
 ## Deploying to Moonbase Alpha
 1. Fund your deployment account via the [Moonbase Alpha faucet](https://apps.moonbeam.network/moonbase-alpha/faucet/).
-2. Ensure the account is imported into Ape (`ape accounts import <alias>`).
-3. Deploy the contract:
+2. Ensure the account is imported into Ape (`ape accounts import <alias>`), and set the alias and optional env output path:
    ```bash
-   ape run scripts/deploy_audit_log.py --network moonbeam:moonbase -- --account-alias <alias> --save-env .env.local
+   export APE_ACCOUNT_ALIAS=<alias>
+   export AUDIT_LOG_ENV_PATH=.env.local  # optional
    ```
-4. Source the updated env file so `AUDIT_LOG_ADDRESS` is available to the client/API.
+3. Deploy the contract via Ape (this connects you to Moonbase Alpha and handles RPC retries):
+   ```bash
+   ape run scripts/deploy_audit_log.py --network moonbeam:moonbase
+   ```
+4. Source the updated env file (`.env.local`) so `AUDIT_LOG_ADDRESS` is available to the client/API.
 
 Each deployment also writes a JSON record under `artifacts/deployments/` for auditability.
 
