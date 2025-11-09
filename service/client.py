@@ -145,5 +145,10 @@ def _coerce_tx_hash(receipt: Any) -> str:
     if tx_hash is None:
         raise RuntimeError("Transaction receipt did not include a hash")
     if hasattr(tx_hash, "hex"):
-        return tx_hash.hex()
+        hex_str = tx_hash.hex()
+        if not hex_str.startswith("0x"):
+            hex_str = "0x" + hex_str
+        return hex_str
+    if isinstance(tx_hash, str) and not tx_hash.startswith("0x"):
+        return "0x" + tx_hash
     return str(tx_hash)

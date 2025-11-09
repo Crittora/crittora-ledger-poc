@@ -1,8 +1,9 @@
 import pytest
 from ape.exceptions import ContractLogicError
+from hexbytes import HexBytes
 
-ZERO_HASH = "0x" + "00" * 32
-ALT_HASH = "0x" + "11" * 32
+ZERO_HASH = HexBytes("0x" + "00" * 32)
+ALT_HASH = HexBytes("0x" + "11" * 32)
 
 
 def test_write_log_appends_entries(project, accounts):
