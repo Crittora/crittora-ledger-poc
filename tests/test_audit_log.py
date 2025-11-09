@@ -4,8 +4,6 @@ from ape.exceptions import ContractLogicError
 ZERO_HASH = "0x" + "00" * 32
 ALT_HASH = "0x" + "11" * 32
 
-pytest.importorskip("ape_solidity")
-
 
 def test_write_log_appends_entries(project, accounts):
     deployer = accounts[0]

@@ -25,6 +25,7 @@ SRD.md            # System requirements & architecture plan
   pip install -r requirements.txt
   ape plugins install moonbeam solidity
   ```
+- Solidity compiler 0.8.20 (managed automatically via `ape-config.yaml` once the plugin is installed).
 - Local virtual environment (`python -m venv .venv && source .venv/bin/activate`)
 - Moonbase Alpha account funded via the public faucet
 

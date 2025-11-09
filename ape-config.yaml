@@ -4,6 +4,10 @@ plugins:
   - solidity
   - moonbeam
 
+compilers:
+  solidity:
+    version: 0.8.20
+
 networks:
   moonbeam:
     default_provider: public
