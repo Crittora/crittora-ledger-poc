@@ -44,11 +44,18 @@ SRD.md            # System requirements & architecture plan
    ```
 3. Verify `ape-config.yaml` recognizes the Moonbase network (already scaffolded) and that your account is funded via the faucet.
 
+## Environment Variables
+- `AUDIT_LOG_ADDRESS` – deployed AuditLog contract address (Moonbase Alpha by default).
+- `APE_ACCOUNT_ALIAS` – Ape keystore alias used for signing transactions.
+- `MOONBASE_RPC_URL` – RPC endpoint consumed by Ape (already referenced in `ape-config.yaml`).
+- `PRIVATE_KEY` (optional) – only if injecting a raw key via Ape; never commit this value.
+
 ## Useful Commands
 - `ape compile` – compile contracts in `contracts/`.
 - `ape test --network moonbeam:moonbase` – run Pytest suites against Moonbase Alpha (or omit `--network` for local testing).
-- `ape run scripts/submit_log.py --network moonbeam:moonbase` – broadcast a demo audit event (script to be implemented).
-- `ape run scripts/fetch_logs.py --network moonbeam:moonbase` – pull on-chain events for reconciliation.
+- `ape run scripts/submit_log.py --network moonbeam:moonbase -- verb 0xHASH ref-123` – broadcast a log entry (reads env vars for account/contract unless overridden with flags).
+- `ape run scripts/fetch_logs.py --network moonbeam:moonbase -- --limit 50` – export recent entries to `artifacts/audit_snapshot.json`.
+- `uvicorn service.api:app --reload` – start the REST API locally (POST `/logs`, GET `/logs?limit=10`).
 
 ## Security & Public Repo Hygiene
 - Secrets (RPC URLs with credentials, private keys) must stay in environment variables or encrypted keyfiles ignored by Git.
@@ -56,8 +63,4 @@ SRD.md            # System requirements & architecture plan
 - See `AGENTS.md` for coding, testing, and PR expectations plus public-repo rules.
 
 ## Planning & Next Steps
-The detailed requirements, open questions, and directory layout live in `SRD.md`. Current code is scaffolding only (API/CLI return 501/placeholder outputs). Next iterations should:
-1. Implement the `AuditLog` contract storage + events.
-2. Wire `service.client` to submit/read logs via Ape.
-3. Connect the CLI/REST layers and flesh out the Pytest suites.
-Track decisions and follow-ups in issues referencing the SRD sections.
+The detailed requirements, open questions, and directory layout live in `SRD.md`. Current implementation includes a working `AuditLog` contract, Python client helpers, CLI utilities, and REST endpoints. Upcoming work focuses on Moonbase Alpha deployments, integrating with upstream systems, and expanding the automated test suite. Track decisions and follow-ups in issues referencing the SRD sections.

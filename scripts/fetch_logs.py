@@ -8,18 +8,30 @@ once the AuditLog contract exposes read/query capabilities.
 from __future__ import annotations
 
 from pathlib import Path
+import json
 
 import typer
 
-from service import client  # noqa: F401  # imported for future use
+from service import client
 
 app = typer.Typer(help="Fetch audit log entries and write them to an artifact file.")
 
 
 @app.command()
-def export(limit: int = 100, output: Path = Path("artifacts/audit_snapshot.json")):
-    typer.echo("Audit log export is not implemented yet.")
-    raise typer.Exit(code=0)
+def export(
+    limit: int = typer.Option(100, help="Maximum number of most recent entries to fetch."),
+    output: Path = typer.Option(Path("artifacts/audit_snapshot.json"), help="File path for the exported JSON."),
+    contract_address: str = typer.Option(
+        None,
+        "--contract-address",
+        "-c",
+        help="AuditLog contract address. Defaults to $AUDIT_LOG_ADDRESS.",
+    ),
+):
+    entries = client.fetch_logs(limit=limit, contract_address=contract_address)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(entries, indent=2))
+    typer.secho(f"Wrote {len(entries)} entries to {output}", fg=typer.colors.GREEN)
 
 
 if __name__ == "__main__":
