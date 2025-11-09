@@ -1,7 +1,32 @@
 import pytest
+from ape.exceptions import ContractLogicError
+
+ZERO_HASH = "0x" + "00" * 32
+ALT_HASH = "0x" + "11" * 32
+
+pytest.importorskip("ape_solidity")
 
 
-@pytest.mark.skip(reason="AuditLog contract not implemented yet")
-def test_audit_log_append_only():
-    """Placeholder test ensuring append-only invariants are covered later."""
-    assert False, "Implement append-only tests once the contract exists"
+def test_write_log_appends_entries(project, accounts):
+    deployer = accounts[0]
+    actor = accounts[1]
+    contract = project.AuditLog.deploy(sender=deployer)
+
+    tx = contract.writeLog("CREATE", ZERO_HASH, "ref-1", sender=actor)
+    assert tx is not None
+
+    assert contract.totalLogs() == 1
+    entry = contract.getLog(0)
+    assert entry.actor == actor.address
+    assert entry.payloadHash == ZERO_HASH
+    assert entry.verb == "CREATE"
+    assert entry.refId == "ref-1"
+    assert entry.timestamp > 0
+
+
+def test_get_log_out_of_range_reverts(project, accounts):
+    contract = project.AuditLog.deploy(sender=accounts[0])
+    contract.writeLog("UPDATE", ALT_HASH, "ref-2", sender=accounts[1])
+
+    with pytest.raises(ContractLogicError):
+        contract.getLog(2)
