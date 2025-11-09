@@ -32,8 +32,12 @@ def _deploy(
 ) -> None:
     sender = _load_account(account_alias)
     typer.secho(f"Deploying AuditLog with account {sender.alias!r}...", fg=typer.colors.CYAN)
+    _emit_balance(sender)
 
     contract = project.AuditLog.deploy(sender=sender)
+    if contract is None or not getattr(contract, "address", None):
+        raise RuntimeError("AuditLog deployment failed; no contract address returned.")
+
     address = str(contract.address)
 
     typer.secho(f"AuditLog deployed to {address}", fg=typer.colors.GREEN)
@@ -59,7 +63,18 @@ def _load_account(alias_override: Optional[str]) -> AccountAPI:
 
 def _resolve_env_path() -> Optional[Path]:
     path = os.getenv(AUDIT_LOG_ENV_PATH_ENV)
-    return Path(path) if path else None
+    if path:
+        return Path(path)
+    default_env = Path(".env")
+    return default_env if default_env.exists() else None
+
+
+def _emit_balance(sender: AccountAPI) -> None:
+    raw_balance = getattr(sender, "balance", None)
+    if raw_balance is None:
+        return
+    dev_balance = raw_balance / 1e18
+    typer.echo(f"Account balance: {dev_balance:.4f} DEV")
 
 
 def _append_env(path: Path, address: str) -> None:

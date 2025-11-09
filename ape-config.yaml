@@ -12,7 +12,9 @@ networks:
   moonbeam:
     default_provider: public
     moonbase:
-      default_provider: public
+      default_provider: "onfinality"
+      onfinality:
+        url: "${MOONBASE_RPC_URL}"
       gas:
         # Moonbase Alpha gas price fluctuates; let Ape estimate unless env overrides.
         max_gas_price: auto
