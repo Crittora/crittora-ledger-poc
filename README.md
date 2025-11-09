@@ -9,10 +9,10 @@ Minimal Ape/Python proof of concept that records audit events on Moonbeam networ
 
 ## Project Structure
 ```
-contracts/        # Smart contracts (e.g., AuditLog.sol)
-service/          # Python client/API helpers (to be added)
-scripts/          # CLI utilities for submit/fetch flows
-tests/            # Pytest suites for contracts + service
+contracts/        # Smart contracts (AuditLog.sol scaffold)
+service/          # Python client/API helpers (placeholders for now)
+scripts/          # CLI utilities for submit/fetch flows (Typer stubs)
+tests/            # Pytest suites for contracts + service (skipped placeholders)
 ape-config.yaml   # Ape project + network configuration
 AGENTS.md         # Contributor guidelines
 SRD.md            # System requirements & architecture plan
@@ -20,8 +20,9 @@ SRD.md            # System requirements & architecture plan
 
 ## Requirements
 - Python 3.10+
-- Ape Framework (`pip install ape`) plus Moonbeam + Solidity plugins:
+- Ape Framework plus Moonbeam + Solidity plugins:
   ```bash
+  pip install -r requirements.txt
   ape plugins install moonbeam solidity
   ```
 - Local virtual environment (`python -m venv .venv && source .venv/bin/activate`)
@@ -30,7 +31,9 @@ SRD.md            # System requirements & architecture plan
 ## Setup
 1. Clone the repo and install dependencies:
    ```bash
-   pip install -r requirements.txt  # once defined
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
    ape compile
    ```
 2. Configure environment variables (never commit secrets):
@@ -38,7 +41,7 @@ SRD.md            # System requirements & architecture plan
    export MOONBASE_RPC_URL="https://rpc.api.moonbase.moonbeam.network"
    export PRIVATE_KEY="0xabc123..."          # or point Ape at an encrypted keyfile
    ```
-3. Update `ape-config.yaml` with the Moonbase network alias if not already present.
+3. Verify `ape-config.yaml` recognizes the Moonbase network (already scaffolded) and that your account is funded via the faucet.
 
 ## Useful Commands
 - `ape compile` – compile contracts in `contracts/`.
@@ -52,4 +55,8 @@ SRD.md            # System requirements & architecture plan
 - See `AGENTS.md` for coding, testing, and PR expectations plus public-repo rules.
 
 ## Planning & Next Steps
-The detailed requirements, open questions, and directory layout live in `SRD.md`. Start by implementing the `AuditLog` contract, Moonbase config, and submission/reconciliation scripts, then incrementally add the service/API layer. Track decisions and follow-ups in issues referencing the SRD sections.
+The detailed requirements, open questions, and directory layout live in `SRD.md`. Current code is scaffolding only (API/CLI return 501/placeholder outputs). Next iterations should:
+1. Implement the `AuditLog` contract storage + events.
+2. Wire `service.client` to submit/read logs via Ape.
+3. Connect the CLI/REST layers and flesh out the Pytest suites.
+Track decisions and follow-ups in issues referencing the SRD sections.

@@ -1,1 +1,20 @@
 name: crittora-ledger-poc
+
+plugins:
+  - solidity
+  - moonbeam
+
+networks:
+  moonbeam:
+    default_provider: public
+    moonbase:
+      default_provider: public
+      gas:
+        # Moonbase Alpha gas price fluctuates; let Ape estimate unless env overrides.
+        max_gas_price: auto
+
+providers:
+  moonbeam:
+    public:
+      # Configure the RPC endpoint via environment variable to avoid hard-coding secrets.
+      uri: ${MOONBASE_RPC_URL}
