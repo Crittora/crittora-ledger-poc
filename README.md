@@ -74,6 +74,15 @@ SRD.md            # System requirements & architecture plan
 
 Each deployment also writes a JSON record under `artifacts/deployments/` for auditability.
 
+## Latest Deployment Snapshot
+- Network: `moonbeam:moonbase` (Moonbase Alpha testnet)
+- Contract: `0x62F47E6A2B0055Fb0003146F4a53550b57C31C86`
+- Transaction: `0xfec7c5192ca526c2c5299d1dc8b0431f41906324d7105a77c859689cea79286b`
+- Deployer alias: `moonbase-wallet`
+- Record: `artifacts/deployments/moonbeam-moonbase.json`
+
+Keep `AUDIT_LOG_ADDRESS` in your `.env` aligned with the above address; bump this section whenever a new deployment occurs.
+
 ## Security & Public Repo Hygiene
 - Secrets (RPC URLs with credentials, private keys) must stay in environment variables or encrypted keyfiles ignored by Git.
 - Run a secret scan before every push: `git secrets --scan`.

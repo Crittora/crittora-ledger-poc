@@ -12,5 +12,7 @@ python-dotenv>=1.0.1
 # Testing & linting
 pytest>=8.1.0
 hypothesis>=6.99.0
+# Pin to pre-2.0 to avoid macOS Accelerate segfaults under Python 3.12.
+numpy<2
 black>=24.4.0
 ruff>=0.3.0
